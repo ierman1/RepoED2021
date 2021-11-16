@@ -4,10 +4,10 @@ public class Main {
 
     public static void simulation(int maxClients, int maxCashiers) {
 
-        Queue<Client> q = new Queue<Client>();
+        Queue<Client> q = new Queue<>();
         ArrayList<Client> servedClients = new ArrayList<>();
         Cashier[] cashiers = new Cashier[maxCashiers];
-        int totalTime = 0;
+        int totalTime = 0, meanTime = 0;
 
         for (int i = 0; i < maxCashiers; i++) cashiers[i] = new Cashier();
 
@@ -22,7 +22,7 @@ public class Main {
                     cashiers[j].substractTime(15);
                     if (cashiers[j].getTime() == 0) {
                         cashiers[j].getClient().setDepartureTime(totalTime);
-                        System.out.println(cashiers[j].getClient());
+                        meanTime += cashiers[j].getClient().getTimeSpent();
                         servedClients.add(cashiers[j].getClient());
                         cashiers[j].setClient(q.extract());
                         cashiers[j].setTime(120);
@@ -35,10 +35,21 @@ public class Main {
 
         }
 
+        System.out.println("{ Cashiers => " + maxCashiers + ", Clients => " + maxClients + ", Mean time spent => " + meanTime / maxClients + "}");
+
     }
 
     public static void main(String[] args) {
+        simulation(100, 1);
+        simulation(100, 2);
+        simulation(100, 3);
+        simulation(100, 4);
+        simulation(100, 5);
+        simulation(100, 6);
         simulation(100, 7);
+        simulation(100, 8);
+        simulation(100, 9);
+        simulation(100, 10);
     }
 
 }
