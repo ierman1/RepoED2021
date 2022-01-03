@@ -40,6 +40,7 @@ public class Dijkstra {
         System.out.println("File read...applying dijkstra");
         g.dijkstra("E");
         g.printPath("C");
+        g.printPath("A");
     }
 
 }

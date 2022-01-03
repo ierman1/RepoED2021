@@ -1,7 +1,4 @@
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Graph {
     public static final double INFINITY = Double.MAX_VALUE;
@@ -35,12 +32,12 @@ public class Graph {
     {
         // PriorityQueue<Path> pq = new PriorityQueue<Path>();
         Vertex[] V = new Vertex[vertexMap.size()];
+        List<String> visited = new ArrayList<>();
         HashMap<String, Double> dists = new HashMap<>();
         int i = 0;
 
-        for (Map.Entry<String, Vertex> v : vertexMap.entrySet()) {
+        for (Map.Entry<String, Vertex> v : vertexMap.entrySet())
             dists.put(v.getValue().name, INFINITY);
-        }
 
         Vertex v = getVertex(startName);
         dists.put(v.name, 0d);
@@ -48,20 +45,18 @@ public class Graph {
         while (i != vertexMap.size()) {
 
             V[i] = v;
-            double tmp = 0;
+            visited.add(v.name);
+            double tmp;
 
             for (Edge e : v.adj) {
-                tmp = dists.get(v.name) + e.cost;
-                if (tmp < dists.get(e.dest.name)) {
-                    dists.put(e.dest.name, tmp);
-                    e.dest.prev = v;
-                }
+                tmp = Math.min(dists.get(e.dest.name), dists.get(v.name) + e.cost);
+                dists.put(e.dest.name, tmp);
+                vertexMap.get(e.dest.name).dist = tmp;
             }
 
             tmp = INFINITY;
-
             for (Map.Entry<String, Double> d : dists.entrySet()) {
-                if (d.getValue() != 0 && d.getValue() < tmp) {
+                if (!visited.contains(d.getKey()) && d.getValue() != 0 && d.getValue() < tmp) {
                     tmp = d.getValue();
                     v = vertexMap.get(d.getKey());
                 }
