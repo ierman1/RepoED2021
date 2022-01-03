@@ -30,21 +30,20 @@ public class Graph {
     }
     public void dijkstra(String startName)
     {
-        // PriorityQueue<Path> pq = new PriorityQueue<Path>();
-        Vertex[] V = new Vertex[vertexMap.size()];
-        List<String> visited = new ArrayList<>();
+        PriorityQueue<Path> pq = new PriorityQueue<Path>();
         HashMap<String, Double> dists = new HashMap<>();
-        int i = 0;
+        List<String> visited = new ArrayList<>();
 
         for (Map.Entry<String, Vertex> v : vertexMap.entrySet())
             dists.put(v.getValue().name, INFINITY);
 
         Vertex v = getVertex(startName);
         dists.put(v.name, 0d);
+        pq.add(new Path(v, 0d));
 
-        while (i != vertexMap.size()) {
+        while (!pq.isEmpty() && visited.size() != vertexMap.size()) {
 
-            V[i] = v;
+            v = pq.poll().dest;
             visited.add(v.name);
             double tmp;
 
@@ -52,17 +51,10 @@ public class Graph {
                 tmp = Math.min(dists.get(e.dest.name), dists.get(v.name) + e.cost);
                 dists.put(e.dest.name, tmp);
                 vertexMap.get(e.dest.name).dist = tmp;
+                if (!visited.contains(e.dest.name))
+                    pq.add(new Path(vertexMap.get(e.dest.name), tmp));
             }
 
-            tmp = INFINITY;
-            for (Map.Entry<String, Double> d : dists.entrySet()) {
-                if (!visited.contains(d.getKey()) && d.getValue() != 0 && d.getValue() < tmp) {
-                    tmp = d.getValue();
-                    v = vertexMap.get(d.getKey());
-                }
-            }
-
-            i++;
         }
 
     }
